@@ -1,7 +1,8 @@
 # jax~=0.4.21
 "jax[cuda12]"  # pip install --upgrade "jax[cuda12]"
 optax
-equinox  # pip install --upgrade optax equinox
+equinox
+flax  # pip install --upgrade optax equinox flax
 pillow~=11.3.0
 kaggle~=1.7.4.5
 numpy~=2.2.6
