@@ -1,0 +1,7 @@
+# jax~=0.4.21
+"jax[cuda12]"
+pillow~=11.3.0
+kaggle~=1.7.4.5
+numpy~=2.2.6
+matplotlib~=3.10.7
+protobuf~=6.33.0
