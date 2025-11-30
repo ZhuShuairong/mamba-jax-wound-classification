@@ -173,7 +173,7 @@ class UNet(nn.Module):
         x9 = self.up4(x8, x1, train=train)
         # 输出块
         y = self.outc(x9)
-        return y  # JAX 风格直接返回 y
+        return y, None  # JAX 风格直接返回 y
 
 
 # ========== 测试代码 (JAX 版本) ==========
@@ -213,16 +213,16 @@ if __name__ == "__main__":
     print(f"\nTrainable parameters: {total_params}")
 
     # ---------------- 前向传播 ----------------
-    y_no_att = model.apply(
+    main_out, _ = model.apply(
         {"params": params, "batch_stats": batch_stats},
         x,
         train=False,
     )
-    print(f"Output shape: {y_no_att.shape}")
+    print(f"Output shape: {main_out.shape}")
 
     # 形状检查
-    assert y_no_att.shape == (batch_size, height, width, out_channels), \
-        f"Output shape is wrong: {y_no_att.shape}"
+    assert main_out.shape == (batch_size, height, width, out_channels), \
+        f"Output shape is wrong: {main_out.shape}"
 
     # ---------------- 反向传播测试 ----------------
     # 用一条样本做一次简单的 loss 和梯度，确认梯度能正常传播
@@ -235,7 +235,7 @@ if __name__ == "__main__":
         """
         variables = {"params": params, "batch_stats": batch_stats}
         # mutable=["batch_stats"] 时，apply 返回 (输出, 更新后的变量字典)
-        y_pred, new_variables = model.apply(
+        (y_pred, _), new_variables = model.apply(
             variables,
             x_in,
             train=True,
