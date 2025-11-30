@@ -6,6 +6,36 @@ from scripts.model import Baseline
 from scripts.data_loader import create_data_loader
 from scripts.utils import build_index_flat
 
+"""加载并预处理单张图像load_image+create_data_loader"""
+def load_image(path: str, image_size: int) -> jnp.ndarray:
+    img = PIL.Image.open(path).convert("RGB")
+    img = img.resize((image_size, image_size), PIL.Image.LANCZOS)
+    img = np.array(img, dtype=np.float32) / 255.0  
+    return jnp.array(img)
+
+def create_data_loader(samples: List[Tuple[str, int]], 
+                      batch_size: int, 
+                      image_size: int = 64,
+                      shuffle: bool = True) -> List[Tuple[jnp.ndarray, jnp.ndarray]]:
+    if shuffle:
+        import random
+        random.shuffle(samples)
+    batches = []
+    for i in range(0, len(samples), batch_size):
+        batch_samples = samples[i:i+batch_size]
+        if not batch_samples:
+            continue
+        images = []
+        labels = []
+        for path, label in batch_samples:
+            img = load_image(path, image_size)
+            images.append(img)
+            labels.append(label)
+        batch_images = jnp.stack(images)
+        batch_labels = jnp.array(labels, dtype=jnp.int32)
+        batches.append((batch_images, batch_labels))
+    return batches
+
 def cross_entropy_loss(logits: jnp.ndarray, labels: jnp.ndarray) -> jnp.ndarray:
     one_hot = jax.nn.one_hot(labels, logits.shape[-1])
     loss = optax.softmax_cross_entropy(logits, one_hot).mean()
