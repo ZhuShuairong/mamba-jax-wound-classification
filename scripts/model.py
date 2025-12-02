@@ -49,7 +49,7 @@ class Baseline(equinox.Module):
         self.fc1 = equinox.nn.Linear(flattened_dim, 256, key=k_fc1)
         self.fc2 = equinox.nn.Linear(256, 128, key=k_fc2)
         self.fc3 = equinox.nn.Linear(128, num_classes, key=k_fc3)
-        self.dropout = equinox.nn.Dropout(p=0.5, key=k_do)
+        self.dropout = equinox.nn.Dropout(p=0.5)
 
     def __call__(self, x, *, key=None, train: bool = True):
         x = jnp.transpose(x, (0, 3, 1, 2))
