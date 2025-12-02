@@ -23,7 +23,7 @@ def main():
     # 配置参数
     IMAGE_SIZE = 64  # 可选64/128/256
     DATA_DIR = f"./data/augmented/dataset_{IMAGE_SIZE}_low"  # 对应预处理数据路径
-    NUM_CLASSES = 9  # 伤口类别数
+    NUM_CLASSES = 10  # 伤口类别数
     EPOCHS = 15
     BATCH_SIZE = 32
     MODEL_SAVE_PATH = f"./models/mamba_wound_{IMAGE_SIZE}.pkl"  # 模型保存路径
