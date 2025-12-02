@@ -60,7 +60,7 @@ def main():
     # Step 5: Train model
     print("Training model...")
     data_dir = "./data/augmented/dataset_64_low"
-    model = train_model(data_dir, image_size=64, num_classes=9, epochs=10)
+    model = train_model(data_dir, image_size=64, num_classes=10, epochs=10)
     '''
     print("Pipeline completed.")
 
